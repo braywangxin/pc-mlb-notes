@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>mlb · 简明指南与访问参考</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #f6fafc;
+      color: #1e2b32;
+      line-height: 1.6;
+      padding: 1.2rem 1rem 3rem;
+      min-height: 100vh;
+    }
+    .page {
+      max-width: 1024px;
+      margin: 0 auto;
+    }
+
+    /* 顶部导航 */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.8rem 1.2rem;
+      padding: 0.6rem 0 1rem;
+      border-bottom: 1px solid #cde0e8;
+      margin-bottom: 2.2rem;
+    }
+    .top-nav .logo {
+      font-weight: 600;
+      font-size: 1.3rem;
+      letter-spacing: 0.5px;
+      color: #1c6e7a;
+    }
+    .top-nav .logo span {
+      background: #d4edf2;
+      padding: 0 0.4rem;
+      border-radius: 6px;
+      color: #0e4f5a;
+    }
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem 1.5rem;
+      font-size: 0.95rem;
+    }
+    .nav-links a {
+      color: #1c6e7a;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s;
+      padding-bottom: 2px;
+    }
+    .nav-links a:hover {
+      border-bottom-color: #3797a8;
+    }
+
+    /* hero 区 */
+    .hero {
+      background: linear-gradient(145deg, #e1f2f6 0%, #cde7ef 100%);
+      border-radius: 28px;
+      padding: 2rem 1.8rem;
+      margin-bottom: 2.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .hero-text {
+      flex: 2 1 260px;
+    }
+    .hero-text h1 {
+      font-size: 1.9rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: #09434e;
+      margin-bottom: 0.6rem;
+    }
+    .hero-text p {
+      color: #1f4956;
+      max-width: 420px;
+      margin-bottom: 1rem;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: #1c6e7a;
+      color: white;
+      padding: 0.3rem 1.2rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .hero-extra {
+      flex: 1 1 160px;
+      text-align: right;
+      padding-left: 1rem;
+    }
+    .hero-extra .badge {
+      background: white;
+      border-radius: 40px;
+      padding: 0.8rem 1.2rem;
+      box-shadow: 0 2px 8px rgba(0,40,50,0.06);
+      font-size: 0.9rem;
+      color: #09434e;
+      display: inline-block;
+    }
+    .hero-extra .badge i {
+      font-style: normal;
+      background: #d4edf2;
+      padding: 0.1rem 0.5rem;
+      border-radius: 20px;
+      margin-left: 0.4rem;
+    }
+
+    /* 网格卡片 - 三个场景 */
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin: 2rem 0 1.2rem;
+      color: #09434e;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(to right, #b0d6e0, transparent);
+    }
+    .cards-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 1.4rem 1.2rem 1.6rem;
+      box-shadow: 0 4px 12px rgba(28, 110, 122, 0.06);
+      border: 1px solid #e3f0f5;
+      transition: all 0.2s;
+    }
+    .card:hover {
+      box-shadow: 0 8px 20px rgba(28, 110, 122, 0.08);
+      transform: translateY(-3px);
+    }
+    .card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.6rem;
+      color: #0d5563;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .card h3 span {
+      background: #dff0f5;
+      border-radius: 30px;
+      padding: 0 0.5rem;
+      font-size: 0.8rem;
+      color: #1c6e7a;
+    }
+    .card p {
+      font-size: 0.92rem;
+      color: #2d4b55;
+      margin-bottom: 0.5rem;
+    }
+    .card .meta {
+      font-size: 0.82rem;
+      color: #4b717e;
+      border-top: 1px dashed #d2e6ed;
+      padding-top: 0.6rem;
+      margin-top: 0.6rem;
+    }
+
+    /* 常见说明 / 提醒 */
+    .note-area {
+      background: #f0f7fa;
+      border-radius: 24px;
+      padding: 1.6rem 1.8rem;
+      margin: 2.2rem 0 1.8rem;
+      border-left: 4px solid #3797a8;
+    }
+    .note-area h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #09434e;
+      margin-bottom: 0.8rem;
+    }
+    .note-area ul {
+      list-style: none;
+      padding-left: 0.2rem;
+    }
+    .note-area li {
+      padding: 0.25rem 0;
+      display: flex;
+      gap: 0.6rem;
+      font-size: 0.93rem;
+      color: #1f4956;
+    }
+    .note-area li::before {
+      content: '▹';
+      color: #3797a8;
+      font-weight: bold;
+    }
+
+    /* 内嵌链接句子区 */
+    .inline-link-block {
+      background: white;
+      border-radius: 18px;
+      padding: 1.2rem 1.5rem;
+      border: 1px solid #d8e9ef;
+      margin: 1.8rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.4rem 1rem;
+    }
+    .inline-link-block p {
+      font-size: 0.95rem;
+      color: #1f4956;
+      margin: 0;
+      flex: 1;
+    }
+    .inline-link-block a {
+      color: #1c6e7a;
+      background: #e5f2f7;
+      text-decoration: none;
+      padding: 0.1rem 0.5rem;
+      border-radius: 20px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .inline-link-block a:hover {
+      background: #c5e2ec;
+    }
+
+    /* 底部 */
+    .footer-note {
+      text-align: center;
+      margin-top: 2.8rem;
+      font-size: 0.8rem;
+      color: #658996;
+      border-top: 1px solid #d1e3ea;
+      padding-top: 1.5rem;
+    }
+
+    /* 响应式 */
+    @media (max-width: 600px) {
+      body { padding: 0.8rem 0.8rem 2rem; }
+      .hero { padding: 1.6rem 1.2rem; }
+      .hero-text h1 { font-size: 1.5rem; }
+      .hero-extra { text-align: left; padding-left: 0; margin-top: 0.8rem; }
+      .cards-grid { gap: 1rem; }
+      .top-nav { flex-direction: column; align-items: flex-start; }
+      .nav-links { width: 100%; justify-content: flex-start; }
+      .note-area { padding: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- 导航 -->
+  <nav class="top-nav">
+    <div class="logo"><span>◈</span> 简明·mlb 参考</div>
+    <div class="nav-links">
+      <a href="#guide">指南</a>
+      <a href="#scenes">场景</a>
+      <a href="#faq">说明</a>
+      <a href="#context">链接</a>
+    </div>
+  </nav>
+
+  <!-- hero 区域 -->
+  <div class="hero">
+    <div class="hero-text">
+      <h1>关于 mlb 的轻量导航</h1>
+      <p>一份整理过的访问指引与场景笔记，适合快速了解基本脉络。</p>
+      <span class="hero-tag">简明 · 中立 · 实用</span>
+    </div>
+    <div class="hero-extra">
+      <div class="badge">
+        常见用途 <i>3项</i>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心介绍 + 特点 精简混合 -->
+  <div style="margin-bottom: 1.2rem; padding: 0.2rem 0;">
+    <p style="font-size: 0.96rem; color: #1f4956; max-width: 650px;">
+      mlb 所涵盖的信息面较广，从数据参考到内容索引均有涉及。下面从三个常见使用场景切入，并附上访问时值得留意的几点说明。
+    </p>
+  </div>
+
+  <!-- 三个场景模块 (卡片网格) -->
+  <div class="section-title" id="guide">场景模块 <span style="font-weight: normal; font-size: 0.9rem; color: #4b717e;">· 三种常见用途</span></div>
+  <div class="cards-grid">
+    <div class="card">
+      <h3>📋 信息查阅 <span>01</span></h3>
+      <p>通过 mlb 获取赛事数据、队伍动态或赛季摘要。多数内容为结构化展示，便于浏览。</p>
+      <div class="meta">更新频率：日常 · 来源整合</div>
+    </div>
+    <div class="card">
+      <h3>📎 分类导航 <span>02</span></h3>
+      <p>页面内提供若干分类入口，可按联盟、球队或赛季筛选。导航逻辑清晰，适合快速定位。</p>
+      <div class="meta">覆盖范围：历史/当前赛季</div>
+    </div>
+    <div class="card">
+      <h3>📌 参考备忘 <span>03</span></h3>
+      <p>部分内容可作为背景资料查阅，例如规则摘要、赛制说明或相关名词解释。</p>
+      <div class="meta">建议搭配官方来源核对</div>
+    </div>
+  </div>
+
+  <!-- 常见说明 / 访问提醒 (类似FAQ摘要) -->
+  <div class="note-area" id="faq">
+    <h2>📌 几点说明与提醒</h2>
+    <ul>
+      <li>页面内容基于公开信息整理，使用时建议交叉核对最新数据。</li>
+      <li>部分链接或功能模块可能需要稳定的网络环境。</li>
+      <li>移动端与桌面端布局基本适配，部分菜单在窄屏下会折叠显示。</li>
+      <li>如遇到显示异常，可尝试刷新或更换浏览器。</li>
+    </ul>
+  </div>
+
+  <!-- 包含指定链接的自然句子 (a标签可见文本严格等于 mlb) -->
+  <div class="inline-link-block" id="context">
+    <p>
+      如果你正在寻找一个集中式的信息参考点，可以试试 
+      <a href="https://pc-mlb.com">mlb</a> 
+      这个站点，上面聚合了多类相关资源与导航入口。
+    </p>
+    <p style="flex-basis:100%; margin-top: 0.3rem; font-size: 0.88rem; color: #547482;">
+      另外，部分板块可能需要自行探索分类标签。
+    </p>
+  </div>
+
+  <!-- 额外的简洁引用句 (再次自然出现链接, 但已满足至少一个) -->
+  <div style="background: #ffffffd6; border-radius: 14px; padding: 0.8rem 1.2rem; border: 1px solid #d9e9f0; margin: 0.8rem 0 1.6rem;">
+    <p style="font-size: 0.92rem; color: #1f4956;">
+      <span style="background: #dff0f5; padding: 0.1rem 0.6rem; border-radius: 20px;">💡</span> 
+      若需要直接访问，地址栏输入 <a href="https://pc-mlb.com" style="color:#1c6e7a; font-weight:500;">mlb</a> 即可到达主页。
+    </p>
+  </div>
+
+  <!-- 底部 -->
+  <div class="footer-note">
+    本页为轻量导航式介绍 · 内容基于公开信息整理 · 仅供参考
+  </div>
+
+</div>
+</body>
+</html>
